@@ -1,0 +1,106 @@
+import java.util.*;
+
+public class Ascii
+{
+    private ArrayList<Character> asciiList = new ArrayList<Character>(); //Array of the characters representing the string value to encode
+    private String asciiString; //String value to convert
+    private ArrayList<String> convertList; //Array of the values to decode
+    
+    /** Default Constructor **/
+    public Ascii()
+    {
+        asciiString = "";
+    }
+    
+    /** Constructors **/
+    public Ascii(String a)
+    {
+        asciiString = a;
+        for(int i = 0; i < asciiString.length(); i++)
+        {
+            asciiList.add(asciiString.charAt(i));
+        }
+    }
+    public Ascii(ArrayList cl)
+    {
+        convertList = cl;
+    }
+    
+    /** Accessors (getters) **/
+    public ArrayList getAsciiList()
+    {
+        return asciiList;
+    }
+    public String getAsciiString()
+    {
+        return asciiString;
+    }
+    public ArrayList getConvertList()
+    {
+        return convertList;
+    }
+    
+    /** Mutators (setters) **/
+    public void setAsciiList(ArrayList<Character> al)
+    {
+        asciiList = al;
+    }
+    public void setAsciiString(String as)
+    {
+        asciiString = as;
+    }
+    public void setConvertList(ArrayList<String> cl)
+    {
+        convertList = cl;
+    }
+    
+    /** Encoding Methods **/
+    public ArrayList encodeAscii()
+    {
+        ArrayList<Integer> returnList = new ArrayList<Integer>();
+        for(char character : asciiList)
+        {
+            returnList.add((int)character);
+        }
+        return returnList;
+    }
+    public ArrayList baseEncodeAscii(int baseValue) //Encodes with a base value
+    {
+        ArrayList<Integer> numList = this.encodeAscii();
+        ArrayList<String> returnList = new ArrayList<String>();
+        Base convert = new Base(baseValue);
+        for(int num : numList)
+        {
+            convert.setDecimal(num);
+            returnList.add(convert.encodeNumber());
+        }
+        return returnList;
+    }
+    
+    /** Decoding Methods **/
+    public String decodeAscii()
+    {
+        String returnStr = "";
+        int numValue;
+        for(String val : convertList)
+        {
+            numValue = Integer.parseInt(val);
+            returnStr += (char)numValue;
+        }
+        return returnStr;
+    }
+    public String baseDecodeAscii(int baseValue) //Decodes with a base value
+    {
+        String returnStr = "";
+        int i = 0;
+        Base convert = new Base(baseValue);
+        for(String character : convertList)
+        {
+            convert.setBaseString(character);
+            convertList.set(i, convert.decodeNumber());
+            i++;
+        }
+        returnStr += this.decodeAscii();
+        return returnStr;
+    }
+}
